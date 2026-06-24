@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV Autopilot — Paste your career. Download an ATS-ready CV.</title>
+<meta name="description" content="Paste your raw career info and download a professionally written, ATS-optimized CV in minutes. Pay per download — no subscription.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --midnight:#101D33;
+  --midnight-2:#1A2C4A;
+  --paper:#FAFAF7;
+  --card:#FFFFFF;
+  --signal:#FF6B4A;       /* signal orange — CTA + accents */
+  --signal-deep:#E0532F;
+  --sky:#9FB4D8;
+  --line:#E4E4DE;
+  --muted:#6B7587;
+  --good:#1E7F4F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Public Sans',sans-serif;background:var(--paper);color:var(--midnight)}
+.container{max-width:1040px;margin:0 auto;padding:0 22px}
+
+/* Nav */
+nav{background:var(--midnight);padding:16px 0}
+nav .container{display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:19px;color:#fff;text-decoration:none}
+.logo em{color:var(--signal);font-style:normal}
+nav .price-pill{font-size:13px;font-weight:600;color:var(--sky)}
+
+/* Hero */
+.hero{background:var(--midnight);color:#fff;padding:64px 0 76px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;right:-120px;top:-60px;width:420px;height:420px;border:1.5px dashed rgba(159,180,216,.25);border-radius:50%;pointer-events:none}
+.hero::before{content:'';position:absolute;right:40px;bottom:-140px;width:300px;height:300px;border:1.5px dashed rgba(255,107,74,.3);border-radius:50%;pointer-events:none}
+.hero h1{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:clamp(32px,5.5vw,54px);line-height:1.06;letter-spacing:-.02em;max-width:680px}
+.hero h1 .hl{color:var(--signal)}
+.hero p.sub{margin-top:18px;font-size:17px;color:var(--sky);max-width:560px;line-height:1.55}
+.hero .cta-row{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{font-family:'Public Sans',sans-serif;font-weight:700;font-size:15px;border:none;border-radius:8px;padding:14px 26px;cursor:pointer;text-decoration:none;display:inline-block;transition:transform .08s,opacity .15s}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:3px solid var(--signal);outline-offset:2px}
+.btn-signal{background:var(--signal);color:#fff}
+.btn-signal:hover{background:var(--signal-deep)}
+.btn-outline{background:transparent;color:#fff;border:1.5px solid #3A4E73}
+.btn-outline:hover{border-color:var(--sky)}
+.hero .nofine{font-size:13px;color:#7A8DAF}
+
+/* Steps strip */
+.steps{border-bottom:1px solid var(--line);background:var(--card)}
+.steps .container{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.step{padding:22px 18px;border-left:1px solid var(--line)}
+.step:first-child{border-left:none}
+.step b{font-family:'Bricolage Grotesque',sans-serif;display:block;font-size:15px;margin-bottom:4px}
+.step span{font-size:13.5px;color:var(--muted);line-height:1.5}
+@media(max-width:720px){.steps .container{grid-template-columns:1fr}.step{border-left:none;border-top:1px solid var(--line)}}
+
+/* App */
+.app{padding:48px 0 80px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;margin-bottom:22px}
+.panel h2{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;margin-bottom:6px}
+.panel p.hint{font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.55}
+textarea{width:100%;min-height:200px;border:1.5px solid var(--line);border-radius:10px;padding:16px;font-family:'Public Sans',sans-serif;font-size:14px;line-height:1.6;color:var(--midnight);background:var(--paper);resize:vertical}
+textarea:focus{outline:none;border-color:var(--signal)}
+.row{display:flex;gap:12px;flex-wrap:wrap;margin-top:14px;align-items:center}
+input[type=text]{font-family:'Public Sans',sans-serif;font-size:14px;padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;background:#fff;flex:1;min-width:220px}
+input[type=text]:focus{outline:none;border-color:var(--signal)}
+.spinner{display:none;width:18px;height:18px;border:2.5px solid var(--line);border-top-color:var(--signal);border-radius:50%;animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{display:none;margin-top:12px;font-size:14px;font-weight:600;color:#B3402E;background:#F9E6E2;border-radius:8px;padding:11px 14px}
+
+/* Preview + paywall */
+#previewSection{display:none}
+.preview-wrap{position:relative}
+.cv-page{background:#fff;border:1px solid var(--line);border-radius:6px;padding:46px 52px;max-width:760px;margin:0 auto;box-shadow:0 2px 14px rgba(16,29,51,.08);font-family:Arial,Helvetica,sans-serif;color:#1a1a1a}
+.cv-page h1{font-size:26px;letter-spacing:.01em;margin-bottom:2px}
+.cv-page .headline{font-size:14px;font-weight:700;color:#444;text-transform:uppercase;letter-spacing:.08em}
+.cv-page .contact{font-size:12.5px;color:#555;margin-top:6px;border-bottom:2px solid #1a1a1a;padding-bottom:12px}
+.cv-page h2{font-size:13px;text-transform:uppercase;letter-spacing:.1em;margin:20px 0 8px;border-bottom:1px solid #ccc;padding-bottom:4px}
+.cv-page p,.cv-page li{font-size:13px;line-height:1.55}
+.cv-page ul{padding-left:18px;margin-top:4px}
+.cv-page .xp{margin-bottom:12px}
+.cv-page .xp .top{display:flex;justify-content:space-between;flex-wrap:wrap;font-size:13.5px}
+.cv-page .xp .top b{font-weight:700}
+.cv-page .xp .top span{color:#555}
+.cv-page .skills{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.cv-page .skills span{font-size:12px;border:1px solid #bbb;border-radius:4px;padding:2px 8px}
+.wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden;border-radius:6px}
+.wm div{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:74px;color:rgba(255,107,74,.16);transform:rotate(-28deg);white-space:nowrap;line-height:2.2}
+.locked .cv-page{user-select:none;filter:blur(0px)}
+.paywall{max-width:760px;margin:18px auto 0;background:var(--midnight);color:#fff;border-radius:14px;padding:26px;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
+.paywall .txt{flex:1;min-width:240px}
+.paywall h3{font-family:'Bricolage Grotesque',sans-serif;font-size:20px}
+.paywall p{font-size:14px;color:var(--sky);margin-top:6px;line-height:1.5}
+.paywall .unlock-row{display:flex;gap:10px;flex-wrap:wrap;width:100%;margin-top:8px}
+.paywall input{background:#fff;border:none}
+.unlocked-bar{display:none;max-width:760px;margin:18px auto 0;background:#E3F2EA;color:var(--good);border-radius:12px;padding:18px 22px;font-weight:700;font-size:15px;align-items:center;gap:14px;flex-wrap:wrap}
+.unlocked-bar .btn{padding:11px 20px;font-size:14px}
+
+/* FAQ + footer */
+.faq{max-width:760px;margin:56px auto 0}
+.faq h2{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin-bottom:14px}
+details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:10px}
+summary{font-weight:700;font-size:14.5px;cursor:pointer}
+details p{font-size:14px;color:var(--muted);margin-top:10px;line-height:1.6}
+footer{background:var(--midnight);color:#7A8DAF;text-align:center;font-size:13px;padding:28px 18px;margin-top:70px}
+
+/* Print: only the CV, clean ATS layout */
+@media print{
+  body *{visibility:hidden}
+  .cv-page,.cv-page *{visibility:visible}
+  .cv-page{position:absolute;left:0;top:0;width:100%;max-width:none;border:none;box-shadow:none;border-radius:0;padding:10mm 12mm}
+  .wm{display:none}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.spinner{animation-duration:2s}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <a class="logo" href="#">CV<em>Autopilot</em></a>
+    <span class="price-pill" id="navPrice"></span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="container">
+    <h1>Paste your career.<br>Download a CV that gets past <span class="hl">the robots.</span></h1>
+    <p class="sub">75% of CVs are rejected by applicant tracking software before a human ever reads them. Paste your raw experience below — messy notes are fine — and get a professionally written, ATS-optimized CV in two minutes.</p>
+    <div class="cta-row">
+      <a class="btn btn-signal" href="#app">Build my CV — free preview</a>
+      <span class="nofine">No sign-up. No subscription. Pay only to download.</span>
+    </div>
+  </div>
+</section>
+
+<section class="steps">
+  <div class="container">
+    <div class="step"><b>1 · Paste</b><span>Dump your work history, skills and education in any format. Bullet points, old CV text, anything.</span></div>
+    <div class="step"><b>2 · Preview</b><span>AI rewrites it into an achievement-driven, keyword-optimized CV. Review the full preview free.</span></div>
+    <div class="step"><b>3 · Download</b><span>One small payment unlocks your watermark-free PDF. No account needed.</span></div>
+  </div>
+</section>
+
+<section class="app container" id="app">
+  <div class="panel">
+    <h2>Your career, in your own words</h2>
+    <p class="hint">Include your name, contact details, jobs (company, role, dates, what you did), education, and any certifications or languages. The more detail you give, the stronger the CV.</p>
+    <textarea id="rawInfo" placeholder="Example:
+Name: Sara Ahmed, Dubai, sara@email.com, +971...
+Current: Sales coordinator at XYZ Trading since 2021. I handle daily sales reports for 25 salesmen, manage pricing for 130 products, built Excel dashboards for management...
+Before that: admin assistant at ABC LLC 2018-2021...
+Education: BCom, University of..., 2018
+Languages: English, Arabic, Hindi"></textarea>
+    <div class="row">
+      <input type="text" id="targetRole" placeholder="Target role (optional) — e.g. Sales Operations Manager">
+      <button class="btn btn-signal" id="btnGenerate">Generate my CV →</button>
+      <div class="spinner" id="spin"></div>
+    </div>
+    <div class="err" id="genErr"></div>
+  </div>
+
+  <div id="previewSection">
+    <div class="preview-wrap locked" id="previewWrap">
+      <div class="cv-page" id="cvPage"></div>
+      <div class="wm" id="wm"><div>PREVIEW · CV AUTOPILOT · PREVIEW<br>PREVIEW · CV AUTOPILOT · PREVIEW<br>PREVIEW · CV AUTOPILOT · PREVIEW</div></div>
+    </div>
+
+    <div class="paywall" id="paywall">
+      <div class="txt">
+        <h3>Unlock your CV</h3>
+        <p>One payment of <b id="payPrice"></b> — you'll instantly receive a license key by email. Paste it here to remove the watermark and download your PDF.</p>
+      </div>
+      <a class="btn btn-signal" id="btnBuy" href="#" target="_blank" rel="noopener">Buy unlock key</a>
+      <div class="unlock-row">
+        <input type="text" id="licenseKey" placeholder="Paste your license key here">
+        <button class="btn btn-outline" id="btnUnlock" style="border-color:#3A4E73">Unlock download</button>
+        <div class="spinner" id="spinUnlock"></div>
+      </div>
+      <div class="err" id="unlockErr" style="width:100%"></div>
+    </div>
+
+    <div class="unlocked-bar" id="unlockedBar">
+      ✓ Unlocked — your CV is ready.
+      <button class="btn btn-signal" id="btnPdf">Download PDF</button>
+      <button class="btn" id="btnCopy" style="background:#fff;border:1.5px solid var(--good);color:var(--good)">Copy as text</button>
+    </div>
+  </div>
+
+  <div class="faq">
+    <h2>Questions</h2>
+    <details><summary>What does "ATS-optimized" mean?</summary><p>Applicant Tracking Systems are the software companies use to scan CVs before a recruiter sees them. This tool structures your CV with the clean formatting, standard sections, and role-relevant keywords that ATS software parses reliably.</p></details>
+    <details><summary>Is my data stored?</summary><p>No accounts, no database. Your text is sent securely to generate the CV and is not saved by this site.</p></details>
+    <details><summary>Can I edit the CV after downloading?</summary><p>Yes — use "Copy as text" to paste the content into Word or Google Docs and tweak anything you like.</p></details>
+    <details><summary>What if I'm not happy with the result?</summary><p>Regenerate as many times as you like before paying — the preview is always free. Refunds are handled through the payment provider's standard process.</p></details>
+  </div>
+</section>
+
+<footer>CV Autopilot · cv.autopilotdollar.com · Pay-per-download, no subscription</footer>
+
+<script>
+/* ====== EDIT THESE TWO LINES AFTER SETTING UP LEMON SQUEEZY (see README) ====== */
+const CONFIG = {
+  checkoutUrl: 'https://YOURSTORE.lemonsqueezy.com/buy/YOUR-PRODUCT-ID',
+  priceLabel: '$4.99'
+};
+/* ============================================================================== */
+
+const $ = id => document.getElementById(id);
+$('navPrice').textContent = 'Pay per download · ' + CONFIG.priceLabel;
+$('payPrice').textContent = CONFIG.priceLabel;
+$('btnBuy').href = CONFIG.checkoutUrl;
+
+let currentCV = null;
+let unlocked = false;
+
+function esc(s){const d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
+
+function renderCV(cv){
+  let h = `<h1>${esc(cv.name)}</h1>
+  <div class="headline">${esc(cv.headline)}</div>
+  <div class="contact">${esc(cv.contact)}</div>`;
+  if(cv.summary) h += `<h2>Professional Summary</h2><p>${esc(cv.summary)}</p>`;
+  if(cv.skills && cv.skills.length) h += `<h2>Core Skills</h2><div class="skills">${cv.skills.map(s=>`<span>${esc(s)}</span>`).join('')}</div>`;
+  if(cv.experience && cv.experience.length){
+    h += `<h2>Professional Experience</h2>`;
+    h += cv.experience.map(x=>`<div class="xp">
+      <div class="top"><b>${esc(x.title)} — ${esc(x.company)}</b><span>${esc(x.dates)}</span></div>
+      <ul>${(x.bullets||[]).map(b=>`<li>${esc(b)}</li>`).join('')}</ul>
+    </div>`).join('');
+  }
+  if(cv.education && cv.education.length){
+    h += `<h2>Education</h2>`;
+    h += cv.education.map(e=>`<div class="xp"><div class="top"><b>${esc(e.degree)} — ${esc(e.institution)}</b><span>${esc(e.dates)}</span></div></div>`).join('');
+  }
+  (cv.extras||[]).forEach(x=>{
+    if(x.items && x.items.length) h += `<h2>${esc(x.heading)}</h2><ul>${x.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
+  });
+  $('cvPage').innerHTML = h;
+}
+
+$('btnGenerate').addEventListener('click', async ()=>{
+  const rawInfo = $('rawInfo').value.trim();
+  const errBox = $('genErr');
+  errBox.style.display='none';
+  if(rawInfo.length < 50){
+    errBox.textContent='Please add more detail — at least a few sentences about your experience.';
+    errBox.style.display='block';
+    return;
+  }
+  $('spin').style.display='inline-block';
+  $('btnGenerate').disabled = true;
+  try{
+    const r = await fetch('/api/generate',{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body: JSON.stringify({ rawInfo, targetRole: $('targetRole').value.trim() })
+    });
+    const data = await r.json();
+    if(!r.ok) throw new Error(data.error || 'Generation failed.');
+    currentCV = data.cv;
+    renderCV(currentCV);
+    $('previewSection').style.display='block';
+    if(!unlocked){
+      $('wm').style.display='flex';
+      $('paywall').style.display='flex';
+    }
+    $('previewSection').scrollIntoView({behavior:'smooth'});
+  }catch(e){
+    errBox.textContent = e.message;
+    errBox.style.display='block';
+  }finally{
+    $('spin').style.display='none';
+    $('btnGenerate').disabled = false;
+  }
+});
+
+$('btnUnlock').addEventListener('click', async ()=>{
+  const key = $('licenseKey').value.trim();
+  const errBox = $('unlockErr');
+  errBox.style.display='none';
+  if(!key){ errBox.textContent='Paste the license key from your purchase email.'; errBox.style.display='block'; return; }
+  $('spinUnlock').style.display='inline-block';
+  $('btnUnlock').disabled = true;
+  try{
+    const r = await fetch('/api/unlock',{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body: JSON.stringify({ licenseKey: key })
+    });
+    const data = await r.json();
+    if(!r.ok || !data.unlocked) throw new Error(data.error || 'Invalid license key.');
+    unlocked = true;
+    $('wm').style.display='none';
+    $('paywall').style.display='none';
+    $('previewWrap').classList.remove('locked');
+    $('unlockedBar').style.display='flex';
+  }catch(e){
+    errBox.textContent = e.message;
+    errBox.style.display='block';
+  }finally{
+    $('spinUnlock').style.display='none';
+    $('btnUnlock').disabled = false;
+  }
+});
+
+$('btnPdf').addEventListener('click', ()=> window.print());
+
+$('btnCopy').addEventListener('click', ()=>{
+  if(!currentCV) return;
+  const cv = currentCV;
+  let t = `${cv.name}\n${cv.headline}\n${cv.contact}\n\nPROFESSIONAL SUMMARY\n${cv.summary}\n\nCORE SKILLS\n${(cv.skills||[]).join(' · ')}\n\nPROFESSIONAL EXPERIENCE\n`;
+  (cv.experience||[]).forEach(x=>{ t += `\n${x.title} — ${x.company} (${x.dates})\n` + (x.bullets||[]).map(b=>`• ${b}`).join('\n') + '\n'; });
+  t += `\nEDUCATION\n` + (cv.education||[]).map(e=>`${e.degree} — ${e.institution} (${e.dates})`).join('\n');
+  (cv.extras||[]).forEach(x=>{ t += `\n\n${(x.heading||'').toUpperCase()}\n` + (x.items||[]).map(i=>`• ${i}`).join('\n'); });
+  navigator.clipboard.writeText(t);
+  $('btnCopy').textContent='Copied ✓';
+  setTimeout(()=>$('btnCopy').textContent='Copy as text',2000);
+});
+</script>
+</body>
+</html>

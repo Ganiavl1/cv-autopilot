@@ -13,7 +13,7 @@
   --midnight-2:#1A2C4A;
   --paper:#FAFAF7;
   --card:#FFFFFF;
-  --signal:#FF6B4A;       /* signal orange — CTA + accents */
+  --signal:#FF6B4A;
   --signal-deep:#E0532F;
   --sky:#9FB4D8;
   --line:#E4E4DE;
@@ -24,15 +24,11 @@
 html{scroll-behavior:smooth}
 body{font-family:'Public Sans',sans-serif;background:var(--paper);color:var(--midnight)}
 .container{max-width:1040px;margin:0 auto;padding:0 22px}
-
-/* Nav */
 nav{background:var(--midnight);padding:16px 0}
 nav .container{display:flex;align-items:center;justify-content:space-between}
 .logo{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:19px;color:#fff;text-decoration:none}
 .logo em{color:var(--signal);font-style:normal}
 nav .price-pill{font-size:13px;font-weight:600;color:var(--sky)}
-
-/* Hero */
 .hero{background:var(--midnight);color:#fff;padding:64px 0 76px;position:relative;overflow:hidden}
 .hero::after{content:'';position:absolute;right:-120px;top:-60px;width:420px;height:420px;border:1.5px dashed rgba(159,180,216,.25);border-radius:50%;pointer-events:none}
 .hero::before{content:'';position:absolute;right:40px;bottom:-140px;width:300px;height:300px;border:1.5px dashed rgba(255,107,74,.3);border-radius:50%;pointer-events:none}
@@ -48,8 +44,6 @@ nav .price-pill{font-size:13px;font-weight:600;color:var(--sky)}
 .btn-outline{background:transparent;color:#fff;border:1.5px solid #3A4E73}
 .btn-outline:hover{border-color:var(--sky)}
 .hero .nofine{font-size:13px;color:#7A8DAF}
-
-/* Steps strip */
 .steps{border-bottom:1px solid var(--line);background:var(--card)}
 .steps .container{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
 .step{padding:22px 18px;border-left:1px solid var(--line)}
@@ -57,8 +51,6 @@ nav .price-pill{font-size:13px;font-weight:600;color:var(--sky)}
 .step b{font-family:'Bricolage Grotesque',sans-serif;display:block;font-size:15px;margin-bottom:4px}
 .step span{font-size:13.5px;color:var(--muted);line-height:1.5}
 @media(max-width:720px){.steps .container{grid-template-columns:1fr}.step{border-left:none;border-top:1px solid var(--line)}}
-
-/* App */
 .app{padding:48px 0 80px}
 .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:26px;margin-bottom:22px}
 .panel h2{font-family:'Bricolage Grotesque',sans-serif;font-size:19px;margin-bottom:6px}
@@ -71,8 +63,6 @@ input[type=text]:focus{outline:none;border-color:var(--signal)}
 .spinner{display:none;width:18px;height:18px;border:2.5px solid var(--line);border-top-color:var(--signal);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .err{display:none;margin-top:12px;font-size:14px;font-weight:600;color:#B3402E;background:#F9E6E2;border-radius:8px;padding:11px 14px}
-
-/* Preview + paywall */
 #previewSection{display:none}
 .preview-wrap{position:relative}
 .cv-page{background:#fff;border:1px solid var(--line);border-radius:6px;padding:46px 52px;max-width:760px;margin:0 auto;box-shadow:0 2px 14px rgba(16,29,51,.08);font-family:Arial,Helvetica,sans-serif;color:#1a1a1a}
@@ -90,7 +80,8 @@ input[type=text]:focus{outline:none;border-color:var(--signal)}
 .cv-page .skills span{font-size:12px;border:1px solid #bbb;border-radius:4px;padding:2px 8px}
 .wm{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;overflow:hidden;border-radius:6px}
 .wm div{font-family:'Bricolage Grotesque',sans-serif;font-weight:800;font-size:74px;color:rgba(255,107,74,.16);transform:rotate(-28deg);white-space:nowrap;line-height:2.2}
-.locked .cv-page{user-select:none;filter:blur(0px)}
+.locked .cv-page{user-select:none;-webkit-user-select:none}
+.locked .preview-wrap::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 40px,rgba(255,107,74,.03) 40px,rgba(255,107,74,.03) 80px);pointer-events:none;z-index:2}
 .paywall{max-width:760px;margin:18px auto 0;background:var(--midnight);color:#fff;border-radius:14px;padding:26px;display:flex;gap:20px;flex-wrap:wrap;align-items:center}
 .paywall .txt{flex:1;min-width:240px}
 .paywall h3{font-family:'Bricolage Grotesque',sans-serif;font-size:20px}
@@ -99,8 +90,6 @@ input[type=text]:focus{outline:none;border-color:var(--signal)}
 .paywall input{background:#fff;border:none}
 .unlocked-bar{display:none;max-width:760px;margin:18px auto 0;background:#E3F2EA;color:var(--good);border-radius:12px;padding:18px 22px;font-weight:700;font-size:15px;align-items:center;gap:14px;flex-wrap:wrap}
 .unlocked-bar .btn{padding:11px 20px;font-size:14px}
-
-/* FAQ + footer */
 .faq{max-width:760px;margin:56px auto 0}
 .faq h2{font-family:'Bricolage Grotesque',sans-serif;font-size:22px;margin-bottom:14px}
 details{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-bottom:10px}
@@ -108,41 +97,33 @@ summary{font-weight:700;font-size:14.5px;cursor:pointer}
 details p{font-size:14px;color:var(--muted);margin-top:10px;line-height:1.6}
 footer{background:var(--midnight);color:#7A8DAF;text-align:center;font-size:13px;padding:28px 18px;margin-top:70px}
 
-/* Print: only the CV, clean ATS layout */
+/* PRINT: clean ATS CV, no blank page, no headers/footers */
 @media print{
-  @page{margin:12mm 14mm;size:A4}
-  html,body{height:auto!important}
+  @page{margin:14mm 16mm;size:A4 portrait}
+  body,html{background:#fff!important}
   body>*{display:none!important}
-  #cvPrintRoot{display:block!important;position:static!important}
-  #cvPrintRoot .cv-page{display:block!important;visibility:visible!important;position:static!important;width:100%!important;max-width:none!important;border:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important;margin:0!important;page-break-inside:avoid}
-  #cvPrintRoot .cv-page *{visibility:visible!important}
-  #cvPrintRoot .wm{display:none!important}
-}
-/* Screenshot protection on watermarked preview */
-.locked .cv-page{
-  -webkit-user-select:none;
-  -ms-user-select:none;
-  user-select:none;
-  pointer-events:none;
-}
-.locked .preview-wrap::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  background:repeating-linear-gradient(
-    45deg,
-    transparent,
-    transparent 40px,
-    rgba(255,107,74,.04) 40px,
-    rgba(255,107,74,.04) 80px
-  );
-  pointer-events:none;
-  z-index:2;
+  #cvPrintMount{display:block!important}
+  #cvPrintMount .cv-page{
+    display:block!important;
+    visibility:visible!important;
+    position:static!important;
+    width:100%!important;
+    max-width:none!important;
+    border:none!important;
+    box-shadow:none!important;
+    border-radius:0!important;
+    padding:0!important;
+    margin:0!important;
+  }
+  #cvPrintMount .cv-page *{visibility:visible!important}
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.spinner{animation-duration:2s}}
 </style>
 </head>
 <body>
+
+<!-- Hidden print-only CV mount — never visible on screen -->
+<div id="cvPrintMount" style="display:none"></div>
 
 <nav>
   <div class="container">
@@ -190,9 +171,6 @@ Languages: English, Arabic, Hindi"></textarea>
 
   <div id="previewSection">
     <div class="preview-wrap locked" id="previewWrap">
-      <div id="cvPrintRoot" style="display:none;position:absolute;left:-9999px;top:0;width:100%">
-        <div class="cv-page" id="cvPagePrint"></div>
-      </div>
       <div class="cv-page" id="cvPage"></div>
       <div class="wm" id="wm"><div>PREVIEW · CV AUTOPILOT · PREVIEW<br>PREVIEW · CV AUTOPILOT · PREVIEW<br>PREVIEW · CV AUTOPILOT · PREVIEW</div></div>
     </div>
@@ -230,12 +208,10 @@ Languages: English, Arabic, Hindi"></textarea>
 <footer>CV Autopilot · cv.autopilotdollar.com · Pay-per-download, no subscription</footer>
 
 <script>
-/* ====== EDIT THESE TWO LINES AFTER SETTING UP LEMON SQUEEZY (see README) ====== */
 const CONFIG = {
-  checkoutUrl: 'https://ganimotion.gumroad.com/l/izbdoj'
+  checkoutUrl: 'https://ganimotion.gumroad.com/l/izbdoj',
   priceLabel: '$4.99'
 };
-/* ============================================================================== */
 
 const $ = id => document.getElementById(id);
 $('navPrice').textContent = 'Pay per download · ' + CONFIG.priceLabel;
@@ -246,12 +222,6 @@ let currentCV = null;
 let unlocked = false;
 
 function esc(s){const d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
-
-function renderCV(cv){
-  const html = buildCVHTML(cv);
-  $('cvPage').innerHTML = html;
-  $('cvPagePrint').innerHTML = html;
-}
 
 function buildCVHTML(cv){
   let h = `<h1>${esc(cv.name)}</h1>
@@ -274,6 +244,13 @@ function buildCVHTML(cv){
     if(x.items && x.items.length) h += `<h2>${esc(x.heading)}</h2><ul>${x.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
   });
   return h;
+}
+
+function renderCV(cv){
+  const html = buildCVHTML(cv);
+  $('cvPage').innerHTML = html;
+  // Also populate the hidden print mount
+  $('cvPrintMount').innerHTML = `<div class="cv-page">${html}</div>`;
 }
 
 $('btnGenerate').addEventListener('click', async ()=>{
@@ -342,18 +319,13 @@ $('btnUnlock').addEventListener('click', async ()=>{
 });
 
 $('btnPdf').addEventListener('click', ()=>{
-  const pr = $('cvPrintRoot');
-  pr.style.display = 'block';
-  pr.style.position = 'static';
-  pr.style.left = 'auto';
+  // Show print mount, print, then hide it again
+  const mount = $('cvPrintMount');
+  mount.style.display = 'block';
   setTimeout(()=>{
     window.print();
-    setTimeout(()=>{
-      pr.style.display = 'none';
-      pr.style.position = 'absolute';
-      pr.style.left = '-9999px';
-    }, 500);
-  }, 100);
+    setTimeout(()=>{ mount.style.display = 'none'; }, 1000);
+  }, 150);
 });
 
 $('btnCopy').addEventListener('click', ()=>{

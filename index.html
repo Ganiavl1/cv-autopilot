@@ -110,10 +110,34 @@ footer{background:var(--midnight);color:#7A8DAF;text-align:center;font-size:13px
 
 /* Print: only the CV, clean ATS layout */
 @media print{
-  body *{visibility:hidden}
-  .cv-page,.cv-page *{visibility:visible}
-  .cv-page{position:absolute;left:0;top:0;width:100%;max-width:none;border:none;box-shadow:none;border-radius:0;padding:10mm 12mm}
-  .wm{display:none}
+  @page{margin:12mm 14mm;size:A4}
+  html,body{height:auto!important}
+  body>*{display:none!important}
+  #cvPrintRoot{display:block!important;position:static!important}
+  #cvPrintRoot .cv-page{display:block!important;visibility:visible!important;position:static!important;width:100%!important;max-width:none!important;border:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important;margin:0!important;page-break-inside:avoid}
+  #cvPrintRoot .cv-page *{visibility:visible!important}
+  #cvPrintRoot .wm{display:none!important}
+}
+/* Screenshot protection on watermarked preview */
+.locked .cv-page{
+  -webkit-user-select:none;
+  -ms-user-select:none;
+  user-select:none;
+  pointer-events:none;
+}
+.locked .preview-wrap::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 40px,
+    rgba(255,107,74,.04) 40px,
+    rgba(255,107,74,.04) 80px
+  );
+  pointer-events:none;
+  z-index:2;
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.spinner{animation-duration:2s}}
 </style>
@@ -166,6 +190,9 @@ Languages: English, Arabic, Hindi"></textarea>
 
   <div id="previewSection">
     <div class="preview-wrap locked" id="previewWrap">
+      <div id="cvPrintRoot" style="display:none;position:absolute;left:-9999px;top:0;width:100%">
+        <div class="cv-page" id="cvPagePrint"></div>
+      </div>
       <div class="cv-page" id="cvPage"></div>
       <div class="wm" id="wm"><div>PREVIEW · CV AUTOPILOT · PREVIEW<br>PREVIEW · CV AUTOPILOT · PREVIEW<br>PREVIEW · CV AUTOPILOT · PREVIEW</div></div>
     </div>
@@ -205,7 +232,7 @@ Languages: English, Arabic, Hindi"></textarea>
 <script>
 /* ====== EDIT THESE TWO LINES AFTER SETTING UP LEMON SQUEEZY (see README) ====== */
 const CONFIG = {
-  checkoutUrl: 'https://ganimotion.gumroad.com/l/izbdoj',
+  checkoutUrl: 'https://YOURSTORE.lemonsqueezy.com/buy/YOUR-PRODUCT-ID',
   priceLabel: '$4.99'
 };
 /* ============================================================================== */
@@ -221,6 +248,12 @@ let unlocked = false;
 function esc(s){const d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML;}
 
 function renderCV(cv){
+  const html = buildCVHTML(cv);
+  $('cvPage').innerHTML = html;
+  $('cvPagePrint').innerHTML = html;
+}
+
+function buildCVHTML(cv){
   let h = `<h1>${esc(cv.name)}</h1>
   <div class="headline">${esc(cv.headline)}</div>
   <div class="contact">${esc(cv.contact)}</div>`;
@@ -240,7 +273,7 @@ function renderCV(cv){
   (cv.extras||[]).forEach(x=>{
     if(x.items && x.items.length) h += `<h2>${esc(x.heading)}</h2><ul>${x.items.map(i=>`<li>${esc(i)}</li>`).join('')}</ul>`;
   });
-  $('cvPage').innerHTML = h;
+  return h;
 }
 
 $('btnGenerate').addEventListener('click', async ()=>{
@@ -308,7 +341,20 @@ $('btnUnlock').addEventListener('click', async ()=>{
   }
 });
 
-$('btnPdf').addEventListener('click', ()=> window.print());
+$('btnPdf').addEventListener('click', ()=>{
+  const pr = $('cvPrintRoot');
+  pr.style.display = 'block';
+  pr.style.position = 'static';
+  pr.style.left = 'auto';
+  setTimeout(()=>{
+    window.print();
+    setTimeout(()=>{
+      pr.style.display = 'none';
+      pr.style.position = 'absolute';
+      pr.style.left = '-9999px';
+    }, 500);
+  }, 100);
+});
 
 $('btnCopy').addEventListener('click', ()=>{
   if(!currentCV) return;
